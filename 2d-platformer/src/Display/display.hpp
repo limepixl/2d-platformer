@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/vec2.hpp>
 
 struct Display
 {
@@ -16,3 +17,4 @@ struct Display
 
 Display CreateDisplay(int width, int height, const char* title);
 void DeltaTimeCalc(Display& display);
+void ProcessInput(Display& display, glm::vec2& cameraPosition);

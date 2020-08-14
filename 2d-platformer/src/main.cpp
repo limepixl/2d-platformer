@@ -49,9 +49,16 @@ int main()
 	glm::mat4 projection = glm::ortho(0.0f, (float)display.width, 0.0f, (float)display.height, -1.0f, 1.0f);
 	glUniformMatrix4fv(shader.uniforms["projection"], 1, GL_FALSE, &projection[0][0]);
 
+	glm::vec2 cameraPos(0.0f, 0.0f);
+
 	while(!glfwWindowShouldClose(display.window))
 	{
 		DeltaTimeCalc(display);
+		ProcessInput(display, cameraPos);
+
+		glm::mat4 view(1.0);
+		view = glm::translate(view, glm::vec3(cameraPos, 0.0f));
+		glUniformMatrix4fv(shader.uniforms["view"], 1, GL_FALSE, &view[0][0]);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 

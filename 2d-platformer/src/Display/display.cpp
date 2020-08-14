@@ -1,6 +1,7 @@
 #include "display.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #include <cstdlib>
 #include <cstdio>
@@ -44,6 +45,7 @@ void DeltaTimeCalc(Display& display)
 {
 	float currentTime = (float)glfwGetTime();
 	display.deltaTime = currentTime - display.lastTime;
+	display.lastTime = currentTime;
 	display.numFrames++;
 
 	// One second has passed
@@ -59,4 +61,17 @@ void DeltaTimeCalc(Display& display)
 		display.numFrames = 0;
 		display.lastFPSTime = currentTime;
 	}
+}
+
+void ProcessInput(Display& display, glm::vec2& cameraPosition)
+{
+	float cameraSpeed = 300.0f * display.deltaTime;
+	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPosition -= cameraSpeed * glm::vec2(1.0, 0.0);
+	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPosition += cameraSpeed * glm::vec2(1.0, 0.0);
+	if(glfwGetKey(display.window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPosition += cameraSpeed * glm::vec2(0.0, 1.0);
+	if(glfwGetKey(display.window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPosition -= cameraSpeed * glm::vec2(0.0, 1.0);
 }
