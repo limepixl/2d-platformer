@@ -92,6 +92,8 @@
   <ItemGroup>
     <ClInclude Include="src\AssetManagement\assetmanagement.hpp" />
     <ClInclude Include="src\AssetManagement\shader.hpp" />
+    <ClInclude Include="src\AssetManagement\stb_image.h" />
+    <ClInclude Include="src\AssetManagement\texture.hpp" />
     <ClInclude Include="src\Display\display.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

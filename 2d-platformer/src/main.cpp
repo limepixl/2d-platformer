@@ -1,8 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include "Display/display.hpp"
 #include "AssetManagement/assetmanagement.hpp"
-#include <glm/gtc/matrix_transform.hpp>
+
+unsigned int Texture::GlobalTextureIndex = 0;
 
 int main()
 {
@@ -13,24 +15,17 @@ int main()
 	Shader shader = LoadShadersFromFiles("res/shaders/normal/normal.vs", "res/shaders/normal/normal.fs");
 	glUseProgram(shader.ID);
 
+	Texture testTexture = LoadTexture2DFromFile("res/images/test.png");
+	glUniform1i(shader.uniforms["tex"], testTexture.index);
+
 	float vertices[]
 	{
-		100.0f, 200.0f, 
-		300.0f, 200.0f,
-		300.0f, 400.0f,
-		300.0f, 400.0f,
-		100.0f, 400.0f,
-		100.0f, 200.0f
-	};
-
-	float colors[]
-	{
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f
+		100.0f, 200.0f, 0.0f, 0.0f,
+		300.0f, 200.0f, 1.0f, 0.0f,
+		300.0f, 400.0f, 1.0f, 1.0f,
+		300.0f, 400.0f, 1.0f, 1.0f,
+		100.0f, 400.0f, 0.0f, 1.0f,
+		100.0f, 200.0f, 0.0f, 0.0f
 	};
 
 	GLuint VAO;
@@ -40,18 +35,13 @@ int main()
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-
-	GLuint colorVBO;
-	glGenBuffers(1, &colorVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-	glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), colors, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
 	glm::mat4 model(1.0);
 	glUniformMatrix4fv(shader.uniforms["model"], 1, GL_FALSE, &model[0][0]);
