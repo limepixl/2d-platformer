@@ -30,7 +30,7 @@ Display CreateDisplay(int width, int height, const char* title)
 		printf("Failed to initialize GLAD!\n");
 		glfwTerminate();
 	}
-	glViewport(-width / 2, -height / 2, width / 2, height / 2);
+	glViewport(0, 0, width, height);
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	Display result{ "", window, width, height };
