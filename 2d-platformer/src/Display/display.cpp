@@ -34,10 +34,8 @@ Display CreateDisplay(int width, int height, const char* title)
 	glViewport(0, 0, width, height);
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-	Display result{ "", window, width, height };
-	if(strcpy_s(result.title, 511, title) != 0)
-		printf("Failed to write FPS title to display title buffer!\n");
-
+	Display result { "", window, width, height, 0.0f, 0.0f, 0, 0.0f };
+	strcpy(result.title, title);
 	return result;
 }
 
@@ -55,7 +53,7 @@ void DeltaTimeCalc(Display& display)
 		double fps = (double)display.numFrames / (double)(currentTime - display.lastFPSTime);
 
 		char buffer[512];
-		sprintf_s(buffer, 512,"%s | FPS: %.2lf | Frame Time: %.3lf", display.title, fps, frameTime);
+		sprintf(buffer,"%s | FPS: %.2lf | Frame Time: %.3lf", display.title, fps, frameTime);
 		glfwSetWindowTitle(display.window, buffer);
 
 		display.numFrames = 0;

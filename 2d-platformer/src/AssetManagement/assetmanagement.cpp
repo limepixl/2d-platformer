@@ -11,8 +11,8 @@
 Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath)
 {
     // Load files into memory
-    FILE* vsRaw;
-    if(fopen_s(&vsRaw, vShaderPath, "rb") != 0)
+    FILE* vsRaw = fopen(vShaderPath, "rb");
+    if(!vsRaw)
     {
         printf("Failed to open file at path: %s\n", vShaderPath);
         exit(-1);
@@ -43,8 +43,8 @@ Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath)
         printf("Vertex Shader Compilation Errors:\n%s\n", message);
     }
 
-    FILE* fsRaw;
-    if(fopen_s(&fsRaw, fShaderPath, "rb") != 0)
+    FILE* fsRaw = fopen(fShaderPath, "rb");
+    if(!fsRaw)
     {
         printf("Failed to open file at path: %s\n", fShaderPath);
         exit(-1);
