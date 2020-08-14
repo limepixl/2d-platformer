@@ -87,7 +87,7 @@
     <ClCompile Include="..\thirdparty\glad\src\glad.c" />
     <ClCompile Include="src\AssetManagement\assetmanagement.cpp" />
     <ClCompile Include="src\Display\display.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManagement\assetmanagement.hpp" />
