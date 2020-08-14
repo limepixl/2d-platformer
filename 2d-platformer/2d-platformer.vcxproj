@@ -85,11 +85,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\thirdparty\glad\src\glad.c" />
-    <ClCompile Include="Display\display.cpp" />
+    <ClCompile Include="src\AssetManagement\assetmanagement.cpp" />
+    <ClCompile Include="src\Display\display.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Display\display.h" />
+    <ClInclude Include="src\AssetManagement\assetmanagement.hpp" />
+    <ClInclude Include="src\AssetManagement\shader.hpp" />
+    <ClInclude Include="src\Display\display.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
