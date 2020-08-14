@@ -20,12 +20,12 @@ int main()
 
 	float vertices[]
 	{
-		100.0f, 200.0f, 0.0f, 0.0f,
-		300.0f, 200.0f, 1.0f, 0.0f,
-		300.0f, 400.0f, 1.0f, 1.0f,
-		300.0f, 400.0f, 1.0f, 1.0f,
-		100.0f, 400.0f, 0.0f, 1.0f,
-		100.0f, 200.0f, 0.0f, 0.0f
+		0.0f, 0.0f, 0.0f, 0.0f,
+		(float)testTexture.width, 0.0f, 1.0f, 0.0f,
+		(float)testTexture.width, (float)testTexture.height, 1.0f, 1.0f,
+		(float)testTexture.width, (float)testTexture.height, 1.0f, 1.0f,
+		0.0f, (float)testTexture.height, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 0.0f
 	};
 
 	GLuint VAO;
