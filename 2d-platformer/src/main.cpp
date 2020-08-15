@@ -51,13 +51,13 @@ int main()
 	GLuint VBOs[2];
 	glGenBuffers(2, VBOs);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-	glBufferData(GL_ARRAY_BUFFER, batchedVertices.size() * sizeof(float), batchedVertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 1000 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-	glBufferData(GL_ARRAY_BUFFER, batchedUVs.size() * sizeof(float), batchedUVs.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 1000 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
@@ -71,6 +71,12 @@ int main()
 	{
 		DeltaTimeCalc(display);
 		ProcessInput(display, cameraPos);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, batchedVertices.size() * sizeof(float), batchedVertices.data());
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, batchedUVs.size() * sizeof(float), batchedUVs.data());
 
 		glm::mat4 view(1.0);
 		view = glm::translate(view, glm::vec3(cameraPos, 0.0f));
