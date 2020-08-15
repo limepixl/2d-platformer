@@ -65,11 +65,11 @@ void ProcessInput(Display& display, glm::vec2& cameraPosition)
 {
 	float cameraSpeed = 300.0f * display.deltaTime;
 	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPosition -= cameraSpeed * glm::vec2(1.0, 0.0);
-	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPosition += cameraSpeed * glm::vec2(1.0, 0.0);
+	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPosition -= cameraSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPosition += cameraSpeed * glm::vec2(0.0, 1.0);
-	if(glfwGetKey(display.window, GLFW_KEY_S) == GLFW_PRESS)
 		cameraPosition -= cameraSpeed * glm::vec2(0.0, 1.0);
+	if(glfwGetKey(display.window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPosition += cameraSpeed * glm::vec2(0.0, 1.0);
 }
