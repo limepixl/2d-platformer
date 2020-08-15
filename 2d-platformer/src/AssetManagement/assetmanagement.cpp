@@ -117,7 +117,7 @@ Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath)
     return { ID, uniforms };
 }
 
-Texture LoadTexture2DFromFile(const char* imgPath)
+Texture LoadTexture2DFromFile(const char* imgPath, bool flip)
 {
     stbi_set_flip_vertically_on_load(1);
     

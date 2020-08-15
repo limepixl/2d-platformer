@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Display/display.hpp"
 #include "AssetManagement/assetmanagement.hpp"
+#include "Sprite/sprite.hpp"
+#include <vector>
 
 unsigned int Texture::GlobalTextureIndex = 0;
 
@@ -15,33 +17,11 @@ int main()
 	Shader shader = LoadShadersFromFiles("res/shaders/normal/normal.vs", "res/shaders/normal/normal.fs");
 	glUseProgram(shader.ID);
 
-	Texture testTexture = LoadTexture2DFromFile("res/images/test.png");
-	glUniform1i(shader.uniforms["tex"], testTexture.index);
+	Texture textureAtlas = LoadTexture2DFromFile("res/images/atlas.png");
+	glUniform1i(shader.uniforms["tex"], textureAtlas.index);
 
-	float vertices[]
-	{
-		0.0f, 0.0f, 0.0f, 0.0f,
-		(float)testTexture.width, 0.0f, 1.0f, 0.0f,
-		(float)testTexture.width, (float)testTexture.height, 1.0f, 1.0f,
-		(float)testTexture.width, (float)testTexture.height, 1.0f, 1.0f,
-		0.0f, (float)testTexture.height, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 0.0f
-	};
-
-	GLuint VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	GLuint VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	std::vector<Sprite> sprites;
+	sprites.push_back(LoadSpriteFromAtlas(0, 0));
 
 	glm::mat4 model(1.0);
 	glUniformMatrix4fv(shader.uniforms["model"], 1, GL_FALSE, &model[0][0]);
@@ -62,7 +42,11 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		for(auto& s : sprites)
+		{
+			glBindVertexArray(s.VAO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 
 		glfwSwapBuffers(display.window);
 		glfwPollEvents();

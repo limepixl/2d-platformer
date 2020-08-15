@@ -88,12 +88,14 @@
     <ClCompile Include="src\AssetManagement\assetmanagement.cpp" />
     <ClCompile Include="src\Display\display.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Sprite\sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManagement\assetmanagement.hpp" />
     <ClInclude Include="src\AssetManagement\shader.hpp" />
     <ClInclude Include="src\AssetManagement\texture.hpp" />
     <ClInclude Include="src\Display\display.hpp" />
+    <ClInclude Include="src\Sprite\sprite.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
