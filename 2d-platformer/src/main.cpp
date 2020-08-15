@@ -79,10 +79,10 @@ int main()
 
 		BatchSpriteData(sprites, batch, PV);
 
-		int numSprites = 0;
-		for(auto& s : sprites)
-			numSprites += (s.visible);
-		printf("There are %d visible sprites being drawn\n", numSprites);
+		// int numSprites = 0;
+		// for(auto& s : sprites)
+		//	numSprites += (s.visible);
+		// printf("There are %d visible sprites being drawn\n", numSprites);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.batchedVertices.size() * sizeof(float), batch.batchedVertices.data());

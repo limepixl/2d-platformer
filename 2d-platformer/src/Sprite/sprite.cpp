@@ -56,21 +56,16 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
         };
 
         sprite.visible = true;
-        for(int j = 0; j < 12; j+=2)
-        {
-            glm::vec4 startPos(vertices[j], vertices[j + 1], 0.0f, 1.0f);
-            glm::vec4 endPos(startPos.x + fSpriteWidth, startPos.y + fSpriteWidth, 0.0f, 1.0f);
-            startPos = PV * startPos;
-            endPos = PV * endPos;
-            if(endPos.x < -1.0f || startPos.x > 1.0f || endPos.y < -1.0f || startPos.y > 1.0f)
-            {
-                sprite.visible = false;
-                break;
-            }
-        }
 
-        if(!sprite.visible)
+        glm::vec4 startPos(vertices[0], vertices[1], 0.0f, 1.0f);
+        glm::vec4 endPos(startPos.x + fSpriteWidth, startPos.y + fSpriteWidth, 0.0f, 1.0f);
+        startPos = PV * startPos;
+        endPos = PV * endPos;
+        if(endPos.x < -1.0f || startPos.x > 1.0f || endPos.y < -1.0f || startPos.y > 1.0f)
+        {
+            sprite.visible = false;
             continue;
+        }
 
         batch.batchedVertices.insert(batch.batchedVertices.end(), vertices.begin(), vertices.end());
         batch.batchedUVs.insert(batch.batchedUVs.end(), uvs.begin(), uvs.end());
