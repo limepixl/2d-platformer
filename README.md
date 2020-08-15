@@ -1,6 +1,4 @@
 TODO:
-- Implement camera that can pan and zoom
-- Sprites
-- Texture atlas
+- Asset hot-reloading
 - LONGTERM: Animations
 - LONGTERM: Batching

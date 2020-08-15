@@ -10,8 +10,8 @@ unsigned int Texture::GlobalTextureIndex = 0;
 
 int main()
 {
-	const int WIDTH = 800;
-	const int HEIGHT = 600;
+	const int WIDTH = 1280;
+	const int HEIGHT = 720;
 
 	Display display = CreateDisplay(WIDTH, HEIGHT, "2D Platformer - limepixl");
 	Shader shader = LoadShadersFromFiles("res/shaders/normal/normal.vs", "res/shaders/normal/normal.fs");
@@ -20,11 +20,37 @@ int main()
 	Texture textureAtlas = LoadTexture2DFromFile("res/images/atlas.png");
 	glUniform1i(shader.uniforms["tex"], textureAtlas.index);
 
-	std::vector<Sprite> sprites;
-	sprites.push_back(LoadSpriteFromAtlas(0, 0));
+	std::vector<float> batchedVertices;
+	std::vector<float> batchedUVs;
+	BatchSpriteData(0, 0, { 0.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 1.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 2.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 3.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 4.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 5.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 6.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 6.0f, 1.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 6.0f, 2.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 7.0f, 0.0f }, batchedVertices, batchedUVs);
+	BatchSpriteData(0, 0, { 7.0f, 1.0f }, batchedVertices, batchedUVs);
 
-	glm::mat4 model(1.0);
-	glUniformMatrix4fv(shader.uniforms["model"], 1, GL_FALSE, &model[0][0]);
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	GLuint VBOs[2];
+	glGenBuffers(2, VBOs);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
+	glBufferData(GL_ARRAY_BUFFER, batchedVertices.size() * sizeof(float), batchedVertices.data(), GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
+	glBufferData(GL_ARRAY_BUFFER, batchedUVs.size() * sizeof(float), batchedUVs.data(), GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
 	glm::mat4 projection = glm::ortho(0.0f, (float)display.width, 0.0f, (float)display.height, -1.0f, 1.0f);
 	glUniformMatrix4fv(shader.uniforms["projection"], 1, GL_FALSE, &projection[0][0]);
@@ -42,11 +68,7 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		for(auto& s : sprites)
-		{
-			glBindVertexArray(s.VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
+		glDrawArrays(GL_TRIANGLES, 0, (int)batchedVertices.size());
 
 		glfwSwapBuffers(display.window);
 		glfwPollEvents();

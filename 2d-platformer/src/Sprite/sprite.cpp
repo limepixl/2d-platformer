@@ -2,13 +2,15 @@
 #include <cstdio>
 #include <cstdlib>
 #include <glad/glad.h>
+#include <vector>
+#include <glm/gtc/matrix_transform.hpp>
 
 inline float Normalize(int value, float min, float max)
 {
     return (value - min) / (max - min);
 }
 
-Sprite LoadSpriteFromAtlas(int xIndex, int yIndex)
+void BatchSpriteData(int xIndex, int yIndex, const glm::vec2& pos, std::vector<float>& batchedVertices, std::vector<float>& batchedUVs)
 {
     if(xIndex > 3 || yIndex > 3)
     {
@@ -28,7 +30,7 @@ Sprite LoadSpriteFromAtlas(int xIndex, int yIndex)
     float endX = Normalize(x + 64, 0.0f, 4.0f * spriteWidth);
     float endY = Normalize(y + 64, 0.0f, 4.0f * spriteWidth);
 
-    float uvs[]
+    std::vector<float> uvs
     {
         startX, startY,
         endX, startY,
@@ -39,36 +41,16 @@ Sprite LoadSpriteFromAtlas(int xIndex, int yIndex)
     };
 
     float fSpriteWidth = (float)spriteWidth;
-    float vertices[]
+    std::vector<float> vertices
     {
-        0.0f, 0.0f,
-        fSpriteWidth, 0.0f,
-        fSpriteWidth, fSpriteWidth,
-        fSpriteWidth, fSpriteWidth,
-        0.0f, fSpriteWidth,
-        0.0f, 0.0f
+        pos.x * fSpriteWidth      , pos.y * fSpriteWidth,
+        fSpriteWidth * (1 + pos.x), pos.y * fSpriteWidth,
+        fSpriteWidth * (1 + pos.x), fSpriteWidth * (1 + pos.y),
+        fSpriteWidth * (1 + pos.x), fSpriteWidth * (1 + pos.y),
+        pos.x * fSpriteWidth      , fSpriteWidth * (1 + pos.y),
+        pos.x * fSpriteWidth      , pos.y * fSpriteWidth
     };
 
-    // Generate VBO data
-    GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    GLuint vVBO;
-    glGenBuffers(1, &vVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, vVBO);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-
-    GLuint tVBO;
-    glGenBuffers(1, &tVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, tVBO);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), uvs, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-
-    return { VAO };
+    batchedVertices.insert(batchedVertices.end(), vertices.begin(), vertices.end());
+    batchedUVs.insert(batchedUVs.end(), uvs.begin(), uvs.end());
 }
