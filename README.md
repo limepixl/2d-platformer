@@ -1,6 +1,6 @@
 TODO:
 - Asset hot-reloading
-- Offscreen sprite culling
 - Player character with collision
 - Background (maybe parallax)
+- Batch cache so not all sprites need to get reuploaded
 - LONGTERM: Animations

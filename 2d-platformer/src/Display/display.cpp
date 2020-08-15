@@ -54,7 +54,7 @@ void DeltaTimeCalc(Display& display)
 		double frameTime = 1000.0 / (double)display.numFrames;
 		double fps = (double)display.numFrames / (double)(currentTime - display.lastFPSTime);
 
-		char buffer[512];
+		char buffer[1024];
 		sprintf(buffer,"%s | FPS: %.2lf | Frame Time: %.3lf", display.title, fps, frameTime);
 		glfwSetWindowTitle(display.window, buffer);
 
