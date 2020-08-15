@@ -3,4 +3,10 @@
 #include <glm/vec2.hpp>
 #include <vector>
 
-void BatchSpriteData(int xIndex, int yIndex, const glm::vec2& pos, std::vector<float>& batchedVertices, std::vector<float>& batchedUVs);
+struct Sprite
+{
+	int xIndex, yIndex;
+	glm::vec2 position;
+};
+
+void BatchSpriteData(Sprite& sprite, std::vector<float>& batchedVertices, std::vector<float>& batchedUVs);

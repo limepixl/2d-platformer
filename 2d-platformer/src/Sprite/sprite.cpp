@@ -5,30 +5,27 @@
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 
-inline float Normalize(int value, float min, float max)
+void BatchSpriteData(Sprite& sprite, std::vector<float>& batchedVertices, std::vector<float>& batchedUVs)
 {
-    return (value - min) / (max - min);
-}
-
-void BatchSpriteData(int xIndex, int yIndex, const glm::vec2& pos, std::vector<float>& batchedVertices, std::vector<float>& batchedUVs)
-{
-    if(xIndex > 3 || yIndex > 3)
+    if(sprite.xIndex > 3 || sprite.yIndex > 3)
     {
         printf("Invalid sprite index! Rendering last sprite.\n");
-        xIndex = 3;
-        yIndex = 3;
+        sprite.xIndex = 3;
+        sprite.yIndex = 3;
     }
 
     int spriteWidth = 64;
 
     // Generate UVs from sprite index (4x4 matrix of sprites on atlas)
-    int x = xIndex * spriteWidth;
-    int y = yIndex * spriteWidth;
+    int x = sprite.xIndex * spriteWidth;
+    int y = sprite.yIndex * spriteWidth;
 
-    float startX = Normalize(x, 0.0f, 4.0f * spriteWidth);
-    float startY = Normalize(y, 0.0f, 4.0f * spriteWidth);
-    float endX = Normalize(x + 64, 0.0f, 4.0f * spriteWidth);
-    float endY = Normalize(y + 64, 0.0f, 4.0f * spriteWidth);
+    float min = 0.0f;
+    float max = 4.0f * spriteWidth;
+    float startX = (x - min) / (max - min);
+    float startY = (y - min) / (max - min);
+    float endX = (x + 64.0f - min) / (max - min);
+    float endY = (y + 64.0f - min) / (max - min);
 
     std::vector<float> uvs
     {
@@ -41,6 +38,7 @@ void BatchSpriteData(int xIndex, int yIndex, const glm::vec2& pos, std::vector<f
     };
 
     float fSpriteWidth = (float)spriteWidth;
+    glm::vec2& pos = sprite.position;
     std::vector<float> vertices
     {
         pos.x * fSpriteWidth      , pos.y * fSpriteWidth,

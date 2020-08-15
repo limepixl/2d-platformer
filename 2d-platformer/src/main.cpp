@@ -20,29 +20,31 @@ int main()
 	Texture textureAtlas = LoadTexture2DFromFile("res/images/atlas.png");
 	glUniform1i(shader.uniforms["tex"], textureAtlas.index);
 
+	std::vector<Sprite> sprites
+	{
+		{1, 0, { 0.0f, 0.0f }},
+		{1, 0, { 1.0f, 0.0f }},
+		{1, 0, { 2.0f, 0.0f }},
+		{1, 0, { 3.0f, 0.0f }},
+		{1, 0, { 4.0f, 0.0f }},
+		{1, 0, { 5.0f, 0.0f }},
+		{1, 0, { 6.0f, 0.0f }},
+		{0, 0, { 6.0f, 3.0f }},
+		{0, 0, { 6.0f, 3.0f }},
+		{1, 0, { 7.0f, 0.0f }},
+		{1, 0, { 8.0f, 0.0f }},
+		{1, 0, { 9.0f, 0.0f }},
+		{1, 0, { 10.0f, 0.0f }},
+		{1, 0, { 11.0f, 0.0f }},
+		{1, 0, { 12.0f, 0.0f }},
+		{1, 0, { 13.0f, 0.0f }},
+		{1, 0, { 14.0f, 0.0f }},
+		{1, 0, { 15.0f, 0.0f }},
+		{0, 0, { 7.0f, 3.0f }}
+	};
+
 	std::vector<float> batchedVertices;
 	std::vector<float> batchedUVs;
-	BatchSpriteData(1, 0, { 0.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 1.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 2.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 3.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 4.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 5.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 6.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(0, 0, { 6.0f, 3.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(0, 0, { 6.0f, 3.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 7.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 8.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 9.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 10.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 11.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 12.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 13.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 14.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 15.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 16.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(1, 0, { 17.0f, 0.0f }, batchedVertices, batchedUVs);
-	BatchSpriteData(0, 0, { 7.0f, 3.0f }, batchedVertices, batchedUVs);
 
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
@@ -72,6 +74,9 @@ int main()
 		DeltaTimeCalc(display);
 		ProcessInput(display, cameraPos);
 
+		for(auto& s : sprites)
+			BatchSpriteData(s, batchedVertices, batchedUVs);
+
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, batchedVertices.size() * sizeof(float), batchedVertices.data());
 
@@ -85,6 +90,9 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glDrawArrays(GL_TRIANGLES, 0, (int)batchedVertices.size());
+
+		batchedVertices.clear();
+		batchedUVs.clear();
 
 		glfwSwapBuffers(display.window);
 		glfwPollEvents();
