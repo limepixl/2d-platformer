@@ -79,23 +79,18 @@ int main()
 
 		BatchSpriteData(sprites, batch, PV);
 
-		// int numSprites = 0;
-		// for(auto& s : sprites)
-		//	numSprites += (s.visible);
-		// printf("There are %d visible sprites being drawn\n", numSprites);
-
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.batchedVertices.size() * sizeof(float), batch.batchedVertices.data());
+		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.vertices.size() * sizeof(float), batch.vertices.data());
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.batchedUVs.size() * sizeof(float), batch.batchedUVs.data());
+		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.uvs.size() * sizeof(float), batch.uvs.data());
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glDrawArrays(GL_TRIANGLES, 0, (int)batch.batchedVertices.size() / 2);
+		glDrawArrays(GL_TRIANGLES, 0, (int)batch.vertices.size() / 2);
 
-		batch.batchedVertices.clear();
-		batch.batchedUVs.clear();
+		batch.vertices.clear();
+		batch.uvs.clear();
 
 		glfwSwapBuffers(display.window);
 		glfwPollEvents();

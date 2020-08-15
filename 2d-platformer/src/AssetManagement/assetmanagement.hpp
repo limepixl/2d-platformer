@@ -3,4 +3,4 @@
 #include "texture.hpp"
 
 Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath);
-Texture LoadTexture2DFromFile(const char* imgPath, bool flip = true);
+Texture LoadTexture2DFromFile(const char* imgPath);

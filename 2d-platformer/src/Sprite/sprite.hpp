@@ -12,8 +12,8 @@ struct Sprite
 
 struct Batch
 {
-	std::vector<float> batchedVertices;
-	std::vector<float> batchedUVs;
+	std::vector<float> vertices;
+	std::vector<float> uvs;
 };
 
 void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4& PV);

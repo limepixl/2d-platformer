@@ -18,13 +18,6 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
     {
         Sprite& sprite = sprites[i];
 
-        if(sprite.xIndex > 3 || sprite.yIndex > 3)
-        {
-            printf("Invalid sprite index! Rendering last sprite.\n");
-            sprite.xIndex = 3;
-            sprite.yIndex = 3;
-        }
-
         // Generate UVs from sprite index (4x4 matrix of sprites on atlas)
         int x = sprite.xIndex * spriteWidth;
         int y = sprite.yIndex * spriteWidth;
@@ -67,7 +60,7 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
             continue;
         }
 
-        batch.batchedVertices.insert(batch.batchedVertices.end(), vertices.begin(), vertices.end());
-        batch.batchedUVs.insert(batch.batchedUVs.end(), uvs.begin(), uvs.end());
+        batch.vertices.insert(batch.vertices.end(), vertices.begin(), vertices.end());
+        batch.uvs.insert(batch.uvs.end(), uvs.begin(), uvs.end());
     }
 }
