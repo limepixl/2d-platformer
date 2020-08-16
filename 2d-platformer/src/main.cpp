@@ -39,8 +39,11 @@ int main()
 		{1, 0, { 13.0f, 0.0f} , true},
 		{1, 0, { 14.0f, 0.0f} , true},
 		{1, 0, { 15.0f, 0.0f} , true},
-		{0, 0, { 7.0f, 3.0f }, true}
+		{0, 0, { 7.0f, 3.0f }, true},
+		{0, 3, { 0.0f, 1.0f }, true}
 	};
+
+	Player player{ sprites.back(), true };
 
 	Batch batch;
 
@@ -62,14 +65,16 @@ int main()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
-	glm::vec2 cameraPos(0.0f, 0.0f);
 	glm::mat4 projection = glm::ortho(0.0f, (float)display.width, 0.0f, (float)display.height, -1.0f, 1.0f);
 	glUniformMatrix4fv(shader.uniforms["projection"], 1, GL_FALSE, &projection[0][0]);
+
+	glm::vec2 cameraPos(0.0f, 0.0f);
 
 	while(!glfwWindowShouldClose(display.window))
 	{
 		DeltaTimeCalc(display);
-		ProcessInput(display, cameraPos);
+		ProcessInput(display, player);
+		ProcessCollisions(player, sprites);
 
 		glm::mat4 view(1.0);
 		view = glm::translate(view, glm::vec3(cameraPos, 0.0f));

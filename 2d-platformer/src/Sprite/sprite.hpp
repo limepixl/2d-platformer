@@ -8,6 +8,11 @@ struct Sprite
 	int xIndex, yIndex;
 	glm::vec2 position;
 	bool visible;
+
+	bool operator==(const Sprite& rhs)
+	{
+		return xIndex == rhs.xIndex && yIndex == rhs.yIndex && position == rhs.position && visible == rhs.visible;
+	}
 };
 
 struct Batch
@@ -17,3 +22,11 @@ struct Batch
 };
 
 void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4& PV);
+
+struct Player
+{
+	Sprite& sprite;
+	bool onGround;
+};
+
+void ProcessCollisions(Player& player, std::vector<Sprite>& sprites);

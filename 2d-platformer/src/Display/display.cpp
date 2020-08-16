@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include "../Sprite/sprite.hpp"
 
 Display CreateDisplay(int width, int height, const char* title)
 {
@@ -63,15 +64,24 @@ void DeltaTimeCalc(Display& display)
 	}
 }
 
-void ProcessInput(Display& display, glm::vec2& cameraPosition)
+void ProcessInput(Display& display, Player& player)
 {
-	float cameraSpeed = 300.0f * display.deltaTime;
+	float playerSpeed = 5.0f * display.deltaTime;
 	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPosition += cameraSpeed * glm::vec2(1.0, 0.0);
+		player.sprite.position -= playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPosition -= cameraSpeed * glm::vec2(1.0, 0.0);
+		player.sprite.position += playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPosition -= cameraSpeed * glm::vec2(0.0, 1.0);
+		player.sprite.position += playerSpeed * glm::vec2(0.0, 1.0);
 	if(glfwGetKey(display.window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPosition += cameraSpeed * glm::vec2(0.0, 1.0);
+		player.sprite.position -= playerSpeed * glm::vec2(0.0, 1.0);
+	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.onGround)
+	{
+		player.onGround = false;
+		player.sprite.position.y += 1.0f;
+	}
+
+	float gravity = 30.0f * display.deltaTime;
+	if(!player.onGround)
+		player.sprite.position.y -= gravity;
 }
