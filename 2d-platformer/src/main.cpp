@@ -43,7 +43,12 @@ int main()
 		{0, 3, { 0.0f, 1.0f }, true}
 	};
 
-	Player player{ sprites.back(), true };
+	std::vector<Sprite> spriteMap;
+	spriteMap.resize(50 * 50);
+	for(auto& s : sprites)
+		spriteMap[(int)s.position.x + (int)s.position.y * 50] = s;
+
+	Player player{ spriteMap[50], true, {0.0f, 0.0f} };
 
 	Batch batch;
 
@@ -68,21 +73,21 @@ int main()
 	glm::mat4 projection = glm::ortho(0.0f, (float)display.width, 0.0f, (float)display.height, -1.0f, 1.0f);
 	glUniformMatrix4fv(shader.uniforms["projection"], 1, GL_FALSE, &projection[0][0]);
 
-	glm::vec2 cameraPos(0.0f, 0.0f);
-
 	while(!glfwWindowShouldClose(display.window))
 	{
+		printf("Player position: %f %f\n", player.sprite.position.x, player.sprite.position.y);
 		DeltaTimeCalc(display);
 		ProcessInput(display, player);
-		ProcessCollisions(player, sprites);
+		ProcessCollisions(player, spriteMap);
 
 		glm::mat4 view(1.0);
-		view = glm::translate(view, glm::vec3(cameraPos, 0.0f));
+		view = glm::translate(view, glm::vec3(-player.sprite.position * 64.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(WIDTH * 0.5f, 128.0f, 0.0f));
 
 		glm::mat4 PV = projection * view;
 		glUniformMatrix4fv(shader.uniforms["PV"], 1, GL_FALSE, &PV[0][0]);
 
-		BatchSpriteData(sprites, batch, PV);
+		BatchSpriteData(spriteMap, batch, PV);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.vertices.size() * sizeof(float), batch.vertices.data());

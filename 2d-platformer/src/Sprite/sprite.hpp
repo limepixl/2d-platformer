@@ -5,13 +5,18 @@
 
 struct Sprite
 {
-	int xIndex, yIndex;
+	int xIndex = -1, yIndex = -1;
 	glm::vec2 position;
 	bool visible;
 
 	bool operator==(const Sprite& rhs)
 	{
 		return xIndex == rhs.xIndex && yIndex == rhs.yIndex && position == rhs.position && visible == rhs.visible;
+	}
+
+	bool operator!=(const Sprite& rhs)
+	{
+		return !operator==(rhs);
 	}
 };
 
@@ -27,6 +32,7 @@ struct Player
 {
 	Sprite& sprite;
 	bool onGround;
+	glm::vec2 velocity;
 };
 
 void ProcessCollisions(Player& player, std::vector<Sprite>& sprites);

@@ -66,22 +66,28 @@ void DeltaTimeCalc(Display& display)
 
 void ProcessInput(Display& display, Player& player)
 {
-	float playerSpeed = 5.0f * display.deltaTime;
+	player.sprite.position += player.velocity;
+	player.velocity = glm::vec2(0.0, 0.0);
+
+	float gravity = 6.0f * display.deltaTime;
+	//if(!player.onGround)
+	{
+		//player.velocity -= gravity * glm::vec2(0.0, 1.0);
+	}
+
+	float jumpHeight = 60.0f * display.deltaTime;
+	float playerSpeed = 6.0f * display.deltaTime;
 	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
-		player.sprite.position -= playerSpeed * glm::vec2(1.0, 0.0);
+		player.velocity -= playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
-		player.sprite.position += playerSpeed * glm::vec2(1.0, 0.0);
+		player.velocity += playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_W) == GLFW_PRESS)
-		player.sprite.position += playerSpeed * glm::vec2(0.0, 1.0);
+		player.velocity += playerSpeed * glm::vec2(0.0, 1.0);
 	if(glfwGetKey(display.window, GLFW_KEY_S) == GLFW_PRESS)
-		player.sprite.position -= playerSpeed * glm::vec2(0.0, 1.0);
+		player.velocity -= playerSpeed * glm::vec2(0.0, 1.0);
 	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.onGround)
 	{
 		player.onGround = false;
-		player.sprite.position.y += 1.0f;
+		//player.velocity += jumpHeight * glm::vec2(0.0, 1.0);
 	}
-
-	float gravity = 30.0f * display.deltaTime;
-	if(!player.onGround)
-		player.sprite.position.y -= gravity;
 }
