@@ -85,39 +85,39 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
     if(player.velocity.x <= 0.0f)
     {
         Sprite& s1 = sprites[int(newPlayerPos.x) + int(oldPlayerPos.y) * 50];
-        Sprite& s2 = sprites[int(newPlayerPos.x) + int(oldPlayerPos.y + 0.9f) * 50];
+        Sprite& s2 = sprites[int(newPlayerPos.x) + int(oldPlayerPos.y + 0.99f) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
-            player.sprite.position.x = (int)newPlayerPos.x + 1.0f;
+            player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x + 1.0f);
             player.velocity.x = 0.0f;
         }
     }
     else
     {
         Sprite& s1 = sprites[int(newPlayerPos.x + 1.0f) + int(oldPlayerPos.y) * 50];
-        Sprite& s2 = sprites[int(newPlayerPos.x + 1.0f) + int(oldPlayerPos.y + 0.9f) * 50];
+        Sprite& s2 = sprites[int(newPlayerPos.x + 1.0f) + int(oldPlayerPos.y + 0.99f) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
-            player.sprite.position.x = (float)((int)newPlayerPos.x);
+            player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x);
             player.velocity.x = 0.0f;
         }
     }
 
     // X collision is solved so now test for y
-    if(player.velocity.y <= 0.0f)
+    if(player.velocity.y <= 0.0f)   // Moving down
     {
         Sprite& s1 = sprites[int(newPlayerPos.x) + int(newPlayerPos.y) * 50];
-        Sprite& s2 = sprites[int(newPlayerPos.x + 0.9f) + int(newPlayerPos.y) * 50];
+        Sprite& s2 = sprites[int(newPlayerPos.x + 0.99f) + int(newPlayerPos.y) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.y = (float)((int)newPlayerPos.y + 1);
             player.velocity.y = 0.0f;
         }
     }
-    else
+    else    // Moving up
     {
         Sprite& s1 = sprites[int(newPlayerPos.x) + int(newPlayerPos.y + 1.0f) * 50];
-        Sprite& s2 = sprites[int(newPlayerPos.x + 0.9f) + int(newPlayerPos.y + 1.0f) * 50];
+        Sprite& s2 = sprites[int(newPlayerPos.x + 0.99f) + int(newPlayerPos.y + 1.0f) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.y = (float)((int)newPlayerPos.y);
