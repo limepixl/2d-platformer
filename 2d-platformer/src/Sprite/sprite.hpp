@@ -31,6 +31,7 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
 struct Player
 {
 	Sprite& sprite;
+	bool onGround;
 	int jumpTime = 0;
 	glm::vec2 velocity;
 };

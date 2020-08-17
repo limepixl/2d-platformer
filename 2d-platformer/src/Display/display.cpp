@@ -69,25 +69,22 @@ void ProcessInput(Display& display, Player& player)
 	player.sprite.position += player.velocity;
 	player.velocity = glm::vec2(0.0, 0.0);
 
-	int allowedJumpTime = 50;
-	float gravity = 6.0f * display.deltaTime;
-	if(player.jumpTime >= allowedJumpTime || (player.jumpTime > 0 && glfwGetKey(display.window, GLFW_KEY_SPACE) != GLFW_PRESS))
+	int allowedJumpTime = 40;
+	float gravity = 10.0f * display.deltaTime;
+	if(!player.onGround)
 	{
 		player.velocity -= gravity * glm::vec2(0.0, 1.0);
 	}
 
-	float jumpHeight = 6.0f * display.deltaTime;
+	float jumpHeight = 20.0f * display.deltaTime;
 	float playerSpeed = 6.0f * display.deltaTime;
 	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
 		player.velocity -= playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
 		player.velocity += playerSpeed * glm::vec2(1.0, 0.0);
-	if(glfwGetKey(display.window, GLFW_KEY_W) == GLFW_PRESS)
-		player.velocity += playerSpeed * glm::vec2(0.0, 1.0);
-	if(glfwGetKey(display.window, GLFW_KEY_S) == GLFW_PRESS)
-		player.velocity -= playerSpeed * glm::vec2(0.0, 1.0);
-	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.jumpTime >= 0 && player.jumpTime <= allowedJumpTime)
+	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.jumpTime < allowedJumpTime)
 	{
+		player.onGround = false;
 		player.jumpTime++;
 		player.velocity += jumpHeight * glm::vec2(0.0, 1.0);
 	}
