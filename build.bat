@@ -1,0 +1,1 @@
+cd 2d-platformer && clang++ src/main.cpp ../thirdparty/glad/src/glad.c src/AssetManagement/*.cpp src/Display/*.cpp src/Sprite/*.cpp -I ../thirdparty/glad/include -I ../thirdparty/GLFW/include -I ../thirdparty/glm -I ../thirdparty -L ../thirdparty/GLFW/lib -lglfw3-clang -luser32 -lgdi32 

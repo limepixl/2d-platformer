@@ -67,16 +67,6 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
     }
 }
 
-inline bool AABB(const glm::vec2& posA, const glm::vec2& posB)
-{
-    return posA.x < posB.x + 1.0f && posA.x + 1.0f > posB.x && posA.y < posB.y + 1.0f && posA.y + 1.0f > posB.y;
-}
-
-inline bool PointInsideRect(const glm::vec2& point, const glm::vec2& rect)
-{
-    return point.x >= rect.x && point.x <= rect.x + 1.0f && point.y >= rect.y && point.y <= rect.y + 1.0f;
-}
-
 void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
 {
     glm::vec2 oldPlayerPos = player.sprite.position;
