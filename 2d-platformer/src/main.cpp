@@ -22,25 +22,25 @@ int main()
 
 	std::vector<Sprite> sprites
 	{
-		{1, 0, { 0.0f, 0.0f }, true},
-		{1, 0, { 1.0f, 0.0f }, true},
-		{1, 0, { 2.0f, 0.0f }, true},
-		{1, 0, { 3.0f, 0.0f }, true},
-		{1, 0, { 4.0f, 0.0f }, true},
-		{1, 0, { 5.0f, 0.0f }, true},
-		{1, 0, { 6.0f, 0.0f }, true},
-		{0, 0, { 6.0f, 3.0f }, true},
-		{1, 0, { 7.0f, 0.0f }, true},
-		{1, 0, { 8.0f, 0.0f }, true},
-		{1, 0, { 9.0f, 0.0f }, true},
-		{1, 0, { 10.0f, 0.0f} , true},
-		{1, 0, { 11.0f, 0.0f} , true},
-		{1, 0, { 12.0f, 0.0f} , true},
-		{1, 0, { 13.0f, 0.0f} , true},
-		{1, 0, { 14.0f, 0.0f} , true},
-		{1, 0, { 15.0f, 0.0f} , true},
-		{0, 0, { 7.0f, 3.0f }, true},
-		{0, 3, { 0.0f, 1.0f }, true}
+		{1, 0, { 0.0f, 1.0f }, true},
+		{1, 0, { 1.0f, 1.0f }, true},
+		{1, 0, { 2.0f, 1.0f }, true},
+		{1, 0, { 3.0f, 1.0f }, true},
+		{1, 0, { 4.0f, 1.0f }, true},
+		{1, 0, { 5.0f, 1.0f }, true},
+		{1, 0, { 6.0f, 1.0f }, true},
+		{0, 0, { 6.0f, 4.0f }, true},
+		{1, 0, { 7.0f, 1.0f }, true},
+		{1, 0, { 8.0f, 1.0f }, true},
+		{1, 0, { 9.0f, 1.0f }, true},
+		{1, 0, { 10.0f, 1.0f} , true},
+		{1, 0, { 11.0f, 1.0f} , true},
+		{1, 0, { 12.0f, 1.0f} , true},
+		{1, 0, { 13.0f, 1.0f} , true},
+		{1, 0, { 14.0f, 1.0f} , true},
+		{1, 0, { 15.0f, 1.0f} , true},
+		{0, 0, { 7.0f, 4.0f }, true},
+		{0, 3, { 0.0f, 2.0f }, true}
 	};
 
 	std::vector<Sprite> spriteMap;
@@ -48,7 +48,7 @@ int main()
 	for(auto& s : sprites)
 		spriteMap[(int)s.position.x + (int)s.position.y * 50] = s;
 
-	Player player{ spriteMap[50], true, {0.0f, 0.0f} };
+	Player player{ spriteMap[100], 0, {0.0f, 0.0f} };
 
 	Batch batch;
 
@@ -75,7 +75,6 @@ int main()
 
 	while(!glfwWindowShouldClose(display.window))
 	{
-		printf("Player position: %f %f\n", player.sprite.position.x, player.sprite.position.y);
 		DeltaTimeCalc(display);
 		ProcessInput(display, player);
 		ProcessCollisions(player, spriteMap);

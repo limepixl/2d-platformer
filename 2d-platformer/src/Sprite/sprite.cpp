@@ -112,6 +112,7 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
         {
             player.sprite.position.y = (float)((int)newPlayerPos.y + 1);
             player.velocity.y = 0.0f;
+            player.jumpTime = 0;
         }
     }
     else    // Moving up
@@ -122,7 +123,6 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
         {
             player.sprite.position.y = (float)((int)newPlayerPos.y);
             player.velocity.y = 0.0f;
-            player.onGround = true;
         }
     }
 }
