@@ -88,6 +88,8 @@ void ProcessInput(Display& display, Player& player)
 		player.jumpTime++;
 		player.velocity += jumpHeight * glm::vec2(0.0, 1.0);
 	}
+	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+		player.jumpTime = 1000;
 
 	// Clamp velocity
 	if(player.velocity.x > playerSpeed)
