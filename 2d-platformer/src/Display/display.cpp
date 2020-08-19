@@ -67,16 +67,15 @@ void DeltaTimeCalc(Display& display)
 void ProcessInput(Display& display, Player& player)
 {
 	player.sprite.position += player.velocity;
+	//player.acceleration = glm::vec2(0.0, 0.0);
 	player.velocity = glm::vec2(0.0, 0.0);
 
-	int allowedJumpTime = 40;
-	float gravity = 10.0f * display.deltaTime;
+	int allowedJumpTime = 30;
+	float gravity = 3.0f * display.deltaTime;
 	if(!player.onGround)
-	{
-		player.velocity -= gravity * glm::vec2(0.0, 1.0);
-	}
+		player.acceleration -= gravity * glm::vec2(0.0, 1.0);
 
-	float jumpHeight = 20.0f * display.deltaTime;
+	float jumpHeight = 4.0f * display.deltaTime;
 	float playerSpeed = 6.0f * display.deltaTime;
 	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
 		player.velocity -= playerSpeed * glm::vec2(1.0, 0.0);
@@ -86,10 +85,12 @@ void ProcessInput(Display& display, Player& player)
 	{
 		player.onGround = false;
 		player.jumpTime++;
-		player.velocity += jumpHeight * glm::vec2(0.0, 1.0);
+		player.acceleration += jumpHeight * glm::vec2(0.0, 1.0);
 	}
 	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_RELEASE)
 		player.jumpTime = 1000;
+	
+	player.velocity += player.acceleration;
 
 	// Clamp velocity
 	if(player.velocity.x > playerSpeed)
@@ -97,8 +98,12 @@ void ProcessInput(Display& display, Player& player)
 	else if(player.velocity.x < -playerSpeed)
 		player.velocity.x = -playerSpeed;
 
-	if(player.velocity.y < -gravity)
-		player.velocity.y = gravity;
-	else if(player.velocity.y > jumpHeight)
-		player.velocity.y = jumpHeight;
+	if(player.velocity.y < -4.0f * gravity)
+		player.velocity.y = -4.0f * gravity;
+	else if(player.velocity.y > 4.0f * jumpHeight)
+		player.velocity.y = 4.0f * jumpHeight;
+
+	printf("Player position: %f %f\n", player.sprite.position.x, player.sprite.position.y);
+	printf("Player velocity: %f %f\n", player.velocity.x, player.velocity.y);
+	printf("Player acceleration: %f %f\n", player.acceleration.x, player.acceleration.y);
 }

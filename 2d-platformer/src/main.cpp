@@ -48,7 +48,7 @@ int main()
 	for(auto& s : sprites)
 		spriteMap[(int)s.position.x + (int)s.position.y * 50] = s;
 
-	Player player{ spriteMap[100], true, 0, {0.0f, 0.0f} };
+	Player player{ spriteMap[100], true, 0, {0.0f, 0.0f}, {0.0f, 0.0f} };
 
 	Batch batch;
 

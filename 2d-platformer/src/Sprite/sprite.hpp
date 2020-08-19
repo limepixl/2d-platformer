@@ -34,6 +34,7 @@ struct Player
 	bool onGround;
 	int jumpTime = 0;
 	glm::vec2 velocity;
+	glm::vec2 acceleration;
 };
 
 void ProcessCollisions(Player& player, std::vector<Sprite>& sprites);

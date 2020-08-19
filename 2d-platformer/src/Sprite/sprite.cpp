@@ -139,6 +139,7 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
         // Above solid block
         else
         {
+            player.acceleration = glm::vec2(0.0, 0.0);
             player.onGround = true;
             player.jumpTime = 0;
         }
@@ -151,6 +152,7 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
         {
             player.sprite.position.y = (float)((int)(newPlayerPos.y));
             player.velocity.y = 0.0f;
+            player.jumpTime = 1000;
         }
     }
 }
