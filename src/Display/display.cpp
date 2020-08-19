@@ -1,4 +1,4 @@
-#include "display.hpp"
+#include "display.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-#include "../Sprite/sprite.hpp"
+#include "../Sprite/sprite.h"
 
 Display CreateDisplay(int width, int height, const char* title)
 {

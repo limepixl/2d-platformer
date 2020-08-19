@@ -1,9 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Display/display.hpp"
-#include "AssetManagement/assetmanagement.hpp"
-#include "Sprite/sprite.hpp"
+#include "Display/display.h"
+#include "AssetManagement/assetmanagement.h"
+#include "Sprite/sprite.h"
 #include <vector>
 
 unsigned int Texture::GlobalTextureIndex = 0;

@@ -1,4 +1,4 @@
-#include "assetmanagement.hpp"
+#include "assetmanagement.h"
 #include <glad/glad.h>
 
 #include <cstdio>

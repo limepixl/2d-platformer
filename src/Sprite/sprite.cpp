@@ -1,4 +1,4 @@
-#include "sprite.hpp"
+#include "sprite.h"
 #include <cstdio>
 #include <cstdlib>
 #include <glad/glad.h>
