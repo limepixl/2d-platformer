@@ -67,7 +67,6 @@ void DeltaTimeCalc(Display& display)
 void ProcessInput(Display& display, Player& player)
 {
 	player.sprite.position += player.velocity;
-	//player.acceleration = glm::vec2(0.0, 0.0);
 	player.velocity = glm::vec2(0.0, 0.0);
 
 	int allowedJumpTime = 30;

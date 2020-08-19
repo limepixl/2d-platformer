@@ -74,27 +74,24 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
 
     int oldPlayerPosY = int(oldPlayerPos.y);
     int oldPlayerPosYOffset = int(oldPlayerPos.y + 0.99f);
-    int newPlayerPosX = int(newPlayerPos.x);
-    int newPlayerPosXOffset = int(newPlayerPos.x + 0.99f);
-    int newPlayerPosY = int(newPlayerPos.y);
 
-    if(newPlayerPosX - 1 < 0)
+    if(int(newPlayerPos.x) - 1 < 0)
     {
         player.velocity.x = 0.0f;
         player.sprite.position.x = 1.0f;
     }
-    else if(newPlayerPosX > 49)
+    else if(int(newPlayerPos.x) > 49)
     {
         player.velocity.x = 0.0f;
         player.sprite.position.x = 49.0f;
     }
 
-    if(newPlayerPosY - 1 < 0)
+    if(int(newPlayerPos.y) - 1 < 0)
     {
         player.velocity.y = 0.0f;
         player.sprite.position.y = 3.0f;
     }
-    else if(newPlayerPosY > 49)
+    else if(int(newPlayerPos.y) > 49)
     {
         player.velocity.y = 0.0f;
         player.sprite.position.y = 2.0f;
@@ -102,18 +99,18 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
 
     if(player.velocity.x <= 0.0f)
     {
-        Sprite& s1 = sprites[newPlayerPosX + oldPlayerPosY * 50];
-        Sprite& s2 = sprites[newPlayerPosX + oldPlayerPosYOffset * 50];
+        Sprite& s1 = sprites[int(newPlayerPos.x) + oldPlayerPosY * 50];
+        Sprite& s2 = sprites[int(newPlayerPos.x) + oldPlayerPosYOffset * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
-            player.sprite.position.x = newPlayerPos.x = (float)((int)(newPlayerPos.x + 1));
+            player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x) + 1.0f;
             player.velocity.x = 0.0f;
         }
     }
     else
     {
-        Sprite& s1 = sprites[newPlayerPosX + 1 + oldPlayerPosY * 50];
-        Sprite& s2 = sprites[newPlayerPosX + 1 + oldPlayerPosYOffset * 50];
+        Sprite& s1 = sprites[int(newPlayerPos.x) + 1 + oldPlayerPosY * 50];
+        Sprite& s2 = sprites[int(newPlayerPos.x) + 1 + oldPlayerPosYOffset * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x);
@@ -121,37 +118,38 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
         }
     }
 
-    // X collision is solved so now test for y
+    // X collision is solved so now test for Y
     if(player.velocity.y <= 0.0f)   // Moving down
     {
-        Sprite& s1 = sprites[newPlayerPosX + newPlayerPosY * 50];
-        Sprite& s2 = sprites[newPlayerPosXOffset + newPlayerPosY * 50];
+        Sprite& s1 = sprites[(int)newPlayerPos.x + int(newPlayerPos.y) * 50];
+        Sprite& s2 = sprites[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
-            player.sprite.position.y = (float)((int)(newPlayerPos.y + 1));
+            player.sprite.position.y = newPlayerPos.y = (float)((int)(newPlayerPos.y + 1));
             player.velocity.y = 0.0f;
+            player.acceleration.y = 0.0f;
         }
         
         // Above air block
-        if(sprites[newPlayerPosX + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1 && sprites[newPlayerPosXOffset + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1)
+        if(sprites[(int)newPlayerPos.x + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1 && sprites[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1)
             player.onGround = false;
 
         // Above solid block
         else
         {
-            player.acceleration = glm::vec2(0.0, 0.0);
             player.onGround = true;
             player.jumpTime = 0;
         }
     }
     else // Moving up
     {
-        Sprite& s1 = sprites[newPlayerPosX + (newPlayerPosY + 1) * 50];
-        Sprite& s2 = sprites[newPlayerPosXOffset + (newPlayerPosY + 1) * 50];
+        Sprite& s1 = sprites[(int)newPlayerPos.x + (int(newPlayerPos.y) + 1) * 50];
+        Sprite& s2 = sprites[(int)(newPlayerPos.x + 0.99f) + (int(newPlayerPos.x) + 1) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.y = (float)((int)(newPlayerPos.y));
             player.velocity.y = 0.0f;
+            player.acceleration.y = 0.0f;
             player.jumpTime = 1000;
         }
     }

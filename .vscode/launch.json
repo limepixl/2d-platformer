@@ -8,10 +8,10 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/2d-platformer/a.exe",
+            "program": "${workspaceFolder}/a.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/2d-platformer",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false
         }
