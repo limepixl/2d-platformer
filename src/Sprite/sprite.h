@@ -33,6 +33,7 @@ struct Player
 	Sprite& sprite;
 	bool onGround;
 	int jumpTime = 0;
+	int allowedJumpTime;
 	glm::vec2 velocity;
 	glm::vec2 acceleration;
 };

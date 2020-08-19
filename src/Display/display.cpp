@@ -69,7 +69,6 @@ void ProcessInput(Display& display, Player& player)
 	player.sprite.position += player.velocity;
 	player.velocity = glm::vec2(0.0, 0.0);
 
-	int allowedJumpTime = 30;
 	float gravity = 3.0f * display.deltaTime;
 	if(!player.onGround)
 		player.acceleration -= gravity * glm::vec2(0.0, 1.0);
@@ -80,7 +79,7 @@ void ProcessInput(Display& display, Player& player)
 		player.velocity -= playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
 		player.velocity += playerSpeed * glm::vec2(1.0, 0.0);
-	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.jumpTime < allowedJumpTime)
+	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.jumpTime < player.allowedJumpTime)
 	{
 		player.onGround = false;
 		player.jumpTime++;

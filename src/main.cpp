@@ -52,7 +52,7 @@ int main()
 	for(auto& s : sprites)
 		spriteMap[(int)s.position.x + (int)s.position.y * 50] = s;
 
-	Player player{ spriteMap[100], true, 0, {0.0f, 0.0f}, {0.0f, 0.0f} };
+	Player player{ spriteMap[100], true, 0, 30, {0.0f, 0.0f}, {0.0f, 0.0f} };
 
 	Batch batch;
 
@@ -84,8 +84,8 @@ int main()
 		ProcessCollisions(player, spriteMap);
 
 		glm::mat4 view(1.0);
-		view = glm::translate(view, glm::vec3(-player.sprite.position * 64.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(WIDTH * 0.5f, 128.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(-player.sprite.position.x * 64.0f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(WIDTH * 0.5f, -64.0f, 0.0f));
 
 		glm::mat4 PV = projection * view;
 		glUniformMatrix4fv(shader.uniforms["PV"], 1, GL_FALSE, &PV[0][0]);

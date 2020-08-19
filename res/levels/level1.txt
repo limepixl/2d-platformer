@@ -1,0 +1,4 @@
+// _ == Air
+// B == Brick
+// G == Grass
+
