@@ -19,11 +19,13 @@ Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath)
     }
 
     fseek(vsRaw, 0, SEEK_END);
-    long size = ftell(vsRaw);
+    size_t size = (size_t)ftell(vsRaw);
     rewind(vsRaw);
 
     char* vsBuffer = new char[size + 1];
     size_t readSize = fread(vsBuffer, 1, size, vsRaw);
+    if(readSize != size)
+        printf("Bytes needed to be read: %zu\nBytes successfully read: %zu\n", size, readSize);
     vsBuffer[size] = '\0';
     rewind(vsRaw);
 
@@ -56,6 +58,8 @@ Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath)
 
     char* fsBuffer = new char[size + 1];
     readSize = fread(fsBuffer, 1, size, fsRaw);
+    if(readSize != size)
+        printf("Bytes needed to be read: %zu\nBytes successfully read: %zu\n", size, readSize);
     fsBuffer[size] = '\0';
     rewind(fsRaw);
 

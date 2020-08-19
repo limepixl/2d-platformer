@@ -1,6 +1,7 @@
 #include "sprite.h"
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <glad/glad.h>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
@@ -178,7 +179,7 @@ std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
         if(buffer[i] == '/')
             continue;
 
-        size_t length = strlen(buffer);
+        int length = (int)strlen(buffer);
         if(length != 50)
             printf("Row number %d of level is incomplete! There are %d blocks defined!\n", i, length);
 
