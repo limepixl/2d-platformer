@@ -1,6 +1,3 @@
 TODO:
-- Asset hot-reloading
-- Player character with collision
-- Background (maybe parallax)
+- Reimplement collision with vectors instead of tile based physics
 - Batch cache so not all sprites need to get reuploaded
-- LONGTERM: Animations

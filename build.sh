@@ -1,1 +1,1 @@
-g++ -O2 -Wall -Wextra thirdparty/glad/src/glad.c 2d-platformer/src/main.cpp 2d-platformer/src/**/*.cpp -I 2d-platformer/src/ -I thirdparty/glad/include/ -I thirdparty/ -lglfw -ldl
+g++ -O2 -Wall -Wextra thirdparty/glad/src/glad.c src/main.cpp src/**/*.cpp -I src/ -I thirdparty/glad/include/ -I thirdparty/ -lglfw -ldl
