@@ -198,5 +198,6 @@ std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
         }
     }
 
+    fclose(levelRaw);
     return level;
 }
