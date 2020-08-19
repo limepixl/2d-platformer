@@ -103,7 +103,7 @@ void ProcessInput(Display& display, Player& player)
 	else if(player.velocity.y > 4.0f * jumpHeight)
 		player.velocity.y = 4.0f * jumpHeight;
 
-	printf("Player position: %f %f\n", player.sprite.position.x, player.sprite.position.y);
-	printf("Player velocity: %f %f\n", player.velocity.x, player.velocity.y);
-	printf("Player acceleration: %f %f\n", player.acceleration.x, player.acceleration.y);
+	//printf("Player position: %f %f\n", player.sprite.position.x, player.sprite.position.y);
+	//printf("Player velocity: %f %f\n", player.velocity.x, player.velocity.y);
+	//printf("Player acceleration: %f %f\n", player.acceleration.x, player.acceleration.y);
 }
