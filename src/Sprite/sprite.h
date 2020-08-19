@@ -1,5 +1,4 @@
 #pragma once
-#include <inttypes.h>
 #include <glm/mat4x4.hpp>
 #include <vector>
 
@@ -26,8 +25,6 @@ struct Batch
 	std::vector<float> uvs;
 };
 
-void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4& PV);
-
 struct Player
 {
 	Sprite& sprite;
@@ -38,4 +35,6 @@ struct Player
 	glm::vec2 acceleration;
 };
 
-void ProcessCollisions(Player& player, std::vector<Sprite>& sprites);
+void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV);
+void ProcessCollisions(Player& player, std::vector<Sprite>& level);
+std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex);

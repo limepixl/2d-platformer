@@ -5,7 +5,7 @@
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 
-void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4& PV)
+void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV)
 {
     int spriteWidth = 64;
     float fSpriteWidth = (float)spriteWidth;
@@ -13,10 +13,10 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
     float min = 0.0f;
     float max = 4.0f * spriteWidth;
 
-    int numSprites = (int)sprites.size();
+    int numSprites = (int)level.size();
     for(int i = 0; i < numSprites; i++)
     {
-        Sprite& sprite = sprites[i];
+        Sprite& sprite = level[i];
         if(sprite.xIndex == -1 || sprite.yIndex == -1)
             continue;
 
@@ -67,7 +67,7 @@ void BatchSpriteData(std::vector<Sprite>& sprites, Batch& batch, const glm::mat4
     }
 }
 
-void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
+void ProcessCollisions(Player& player, std::vector<Sprite>& level)
 {
     glm::vec2 oldPlayerPos = player.sprite.position;
     glm::vec2 newPlayerPos = player.sprite.position + player.velocity;
@@ -86,7 +86,7 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
         player.sprite.position.x = 49.0f;
     }
 
-    if(int(newPlayerPos.y) - 1 < 0)
+    if(int(newPlayerPos.y) < 0)
     {
         player.velocity.y = 0.0f;
         player.sprite.position.y = 3.0f;
@@ -99,8 +99,8 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
 
     if(player.velocity.x <= 0.0f)
     {
-        Sprite& s1 = sprites[int(newPlayerPos.x) + oldPlayerPosY * 50];
-        Sprite& s2 = sprites[int(newPlayerPos.x) + oldPlayerPosYOffset * 50];
+        Sprite& s1 = level[int(newPlayerPos.x) + oldPlayerPosY * 50];
+        Sprite& s2 = level[int(newPlayerPos.x) + oldPlayerPosYOffset * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x) + 1.0f;
@@ -109,8 +109,8 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
     }
     else
     {
-        Sprite& s1 = sprites[int(newPlayerPos.x) + 1 + oldPlayerPosY * 50];
-        Sprite& s2 = sprites[int(newPlayerPos.x) + 1 + oldPlayerPosYOffset * 50];
+        Sprite& s1 = level[int(newPlayerPos.x) + 1 + oldPlayerPosY * 50];
+        Sprite& s2 = level[int(newPlayerPos.x) + 1 + oldPlayerPosYOffset * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x);
@@ -121,31 +121,34 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
     // X collision is solved so now test for Y
     if(player.velocity.y <= 0.0f)   // Moving down
     {
-        Sprite& s1 = sprites[(int)newPlayerPos.x + int(newPlayerPos.y) * 50];
-        Sprite& s2 = sprites[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y) * 50];
+        Sprite& s1 = level[(int)newPlayerPos.x + int(newPlayerPos.y) * 50];
+        Sprite& s2 = level[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
-            player.onGround = true;
             player.sprite.position.y = newPlayerPos.y = (float)((int)(newPlayerPos.y + 1));
             player.velocity.y = 0.0f;
             player.acceleration.y = 0.0f;
         }
         
-        bool aboveAirBlock = sprites[(int)newPlayerPos.x + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1 &&
-                             sprites[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1;
+        bool aboveAirBlock = level[(int)newPlayerPos.x + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1 &&
+                             level[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1;
 
         // Above air block
         if(aboveAirBlock)
             player.onGround = false;
 
         // Above solid block
-        else if(player.onGround && player.jumpTime > player.allowedJumpTime)
+        else
+        {
+            player.acceleration.y = 0.0f;
+            player.onGround = true;
             player.jumpTime = 0;
+        }
     }
     else // Moving up
     {
-        Sprite& s1 = sprites[(int)newPlayerPos.x + (int(newPlayerPos.y) + 1) * 50];
-        Sprite& s2 = sprites[(int)(newPlayerPos.x + 0.99f) + (int(newPlayerPos.x) + 1) * 50];
+        Sprite& s1 = level[(int)newPlayerPos.x + (int(newPlayerPos.y) + 1) * 50];
+        Sprite& s2 = level[(int)(newPlayerPos.x + 0.99f) + (int(newPlayerPos.y) + 1) * 50];
         if((s1.xIndex != -1 && s1 != player.sprite) || (s2.xIndex != -1 && s2 != player.sprite))
         {
             player.sprite.position.y = (float)((int)(newPlayerPos.y));
@@ -154,4 +157,46 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& sprites)
             player.jumpTime = 1000;
         }
     }
+}
+
+std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
+{
+    FILE* levelRaw = fopen(path, "rb");
+    if(levelRaw == nullptr)
+    {
+        printf("Failed to load level from file at: %s\n", path);
+        exit(-1);
+    }
+
+    std::vector<Sprite> level;
+    level.resize(25 * 50);
+
+    char buffer[51];
+    for(int i = 24; i >= 0; i--)
+    if(fscanf(levelRaw, "%s", buffer) != EOF)
+    {
+        if(buffer[i] == '/')
+            continue;
+
+        size_t length = strlen(buffer);
+        if(length != 50)
+            printf("Row number %d of level is incomplete! There are %d blocks defined!\n", i, length);
+
+        for(int j = 0; j < length; j++)
+        {
+            if(buffer[j] == '_')
+                continue;
+            else if(buffer[j] == 'B')
+                level.at(j + i * 50) = {0, 0, {(float)j, (float)i}, false};
+            else if(buffer[j] == 'G')
+                level.at(j + i * 50) = {1, 0, {(float)j, (float)i}, false};
+            else if(buffer[j] == 'P')
+            {
+                level.at(j + i * 50) = {0, 3, {(float)j, (float)i}, false};
+                playerIndex = j + i * 50;
+            }
+        }
+    }
+
+    return level;
 }
