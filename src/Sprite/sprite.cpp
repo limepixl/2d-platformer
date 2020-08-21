@@ -131,15 +131,17 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
             player.acceleration.y = 0.0f;
         }
         
-        bool aboveAirBlock = level[(int)newPlayerPos.x + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1 &&
-                             level[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y - 0.01f) * 50].xIndex == -1;
+        Sprite& s3 = level[(int)newPlayerPos.x + int(newPlayerPos.y - 0.01f) * 50];
+        Sprite& s4 = level[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y - 0.01f) * 50];
+
+        bool aboveAirBlock = s3.xIndex == -1 && s4.xIndex == -1;
 
         // Above air block
         if(aboveAirBlock)
             player.onGround = false;
 
         // Above solid block
-        else
+        else if(s3 != player.sprite && s4 != player.sprite)
         {
             player.acceleration.y = 0.0f;
             player.onGround = true;
