@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 struct Texture
 {
@@ -19,3 +20,4 @@ struct Shader
 
 Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath);
 Texture LoadTexture2DFromFile(const char* imgPath);
+std::vector<struct Sprite> LoadLevelFromFile(const char* path, int& playerIndex);

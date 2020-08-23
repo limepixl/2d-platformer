@@ -1,7 +1,4 @@
 #include "sprite.h"
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -181,49 +178,4 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
         else
             CheckCoinCollision(s1, s2, player);
     }
-}
-
-std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
-{
-    FILE* levelRaw = fopen(path, "rb");
-    if(levelRaw == nullptr)
-    {
-        printf("Failed to load level from file at: %s\n", path);
-        exit(-1);
-    }
-
-    std::vector<Sprite> level;
-    level.resize(25 * 50);
-
-    char buffer[51];
-    for(int i = 24; i >= 0; i--)
-    if(fscanf(levelRaw, "%50s", buffer) != EOF)
-    {
-        if(buffer[i] == '/')
-            continue;
-
-        int length = (int)strlen(buffer);
-        if(length != 50)
-            printf("Row number %d of level is incomplete! There are %d blocks defined!\n", i, length);
-
-        for(int j = 0; j < length; j++)
-        {
-            if(buffer[j] == '_')
-                level.at(j + i * 50) = {-1, -1, AIR, {0.0f, 0.0f}, false};
-            else if(buffer[j] == 'B')
-                level.at(j + i * 50) = {0, 0, BRICK, {(float)j, (float)i}, false};
-            else if(buffer[j] == 'G')
-                level.at(j + i * 50) = {1, 0, GRASS, {(float)j, (float)i}, false};
-            else if(buffer[j] == 'C')
-                level.at(j + i * 50) = {0, 1, COIN, {(float)j, (float)i}, false};
-            else if(buffer[j] == 'P')
-            {
-                level.at(j + i * 50) = {0, 3, PLAYER, {(float)j, (float)i}, false};
-                playerIndex = j + i * 50;
-            }
-        }
-    }
-
-    fclose(levelRaw);
-    return level;
 }

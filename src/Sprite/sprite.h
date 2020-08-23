@@ -62,4 +62,3 @@ struct Player
 
 void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV);
 void ProcessCollisions(Player& player, std::vector<Sprite>& level);
-std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex);
