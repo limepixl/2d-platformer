@@ -64,18 +64,9 @@ void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& 
     }
 }
 
-inline void CheckCoinCollision(Sprite& s1, Sprite& s2, Player& player)
+inline bool AABB(const glm::vec2& p1, const glm::vec2& size1, const glm::vec2& p2, const glm::vec2& size2)
 {
-    if(s1.type == COIN && s1 != player.sprite)
-    {
-        s1 = {-1, -1, AIR, {0.0f, 0.0f}, false};
-        player.score++;
-    }
-    if(s2.type == COIN && s2 != player.sprite)
-    {
-        s2 = {-1, -1, AIR, {0.0f, 0.0f}, false};
-        player.score++;
-    }
+    return (p1.x < p2.x + size2.x && p1.x + size1.x > p2.x) && (p1.y < p2.y + size2.y && p1.y + size1.y > p2.y);
 }
 
 void ProcessCollisions(Player& player, std::vector<Sprite>& level)
@@ -108,6 +99,15 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
         player.sprite.position.y = 2.0f;
     }
 
+    // Check if inside coin
+    glm::vec2 playerCenter = player.sprite.position + glm::vec2(0.5f, 0.5f);
+    Sprite& centerSprite = level[int(playerCenter.x) + int(playerCenter.y) * 50];
+    if(centerSprite.type == COIN && centerSprite != player.sprite)
+    {
+        centerSprite = {-1, -1, AIR, {0.0f, 0.0f}, false};
+        player.score++;
+    }
+
     if(player.velocity.x <= 0.0f)
     {
         Sprite& s1 = level[int(newPlayerPos.x) + oldPlayerPosY * 50];
@@ -117,8 +117,6 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x) + 1.0f;
             player.velocity.x = 0.0f;
         }
-        else
-            CheckCoinCollision(s1, s2, player);
     }
     else
     {
@@ -129,8 +127,6 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x);
             player.velocity.x = 0.0f;
         }
-        else
-            CheckCoinCollision(s1, s2, player);
     }
 
     // X collision is solved so now test for Y
@@ -144,8 +140,6 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
             player.velocity.y = 0.0f;
             player.acceleration.y = 0.0f;
         }
-        else
-            CheckCoinCollision(s1, s2, player);
         
         Sprite& s3 = level[(int)newPlayerPos.x + int(newPlayerPos.y - 0.01f) * 50];
         Sprite& s4 = level[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y - 0.01f) * 50];
@@ -175,7 +169,5 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
             player.acceleration.y = 0.0f;
             player.jumpTime = 1000;
         }
-        else
-            CheckCoinCollision(s1, s2, player);
     }
 }
