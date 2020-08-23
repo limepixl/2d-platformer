@@ -198,7 +198,7 @@ std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
 
     char buffer[51];
     for(int i = 24; i >= 0; i--)
-    if(fscanf(levelRaw, "%s", buffer) != EOF)
+    if(fscanf(levelRaw, "%50s", buffer) != EOF)
     {
         if(buffer[i] == '/')
             continue;

@@ -64,7 +64,7 @@ void DeltaTimeCalc(Display& display)
 	}
 }
 
-void ProcessInput(Display& display, Player& player)
+void ProcessInput(const Display& display, Player& player)
 {
 	player.sprite.position += player.velocity;
 	player.velocity = glm::vec2(0.0, 0.0);

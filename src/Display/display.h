@@ -17,4 +17,4 @@ struct Display
 
 Display CreateDisplay(int width, int height, const char* title);
 void DeltaTimeCalc(Display& display);
-void ProcessInput(Display& display, struct Player& player);
+void ProcessInput(const Display& display, struct Player& player);
