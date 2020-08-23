@@ -4,7 +4,6 @@
 #include "Display/display.h"
 #include "AssetManagement/assetmanagement.h"
 #include "Sprite/sprite.h"
-#include <vector>
 
 unsigned int Texture::GlobalTextureIndex = 0;
 

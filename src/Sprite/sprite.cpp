@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <glad/glad.h>
-#include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 
 void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV)
