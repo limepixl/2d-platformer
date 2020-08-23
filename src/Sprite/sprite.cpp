@@ -24,10 +24,10 @@ void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& 
         int x = sprite.xIndex * spriteWidth;
         int y = sprite.yIndex * spriteWidth;
 
-        float startX = (x + 0.5f - min) / (max - min);
-        float startY = (y + 0.5f - min) / (max - min);
-        float endX = (x + 63.5f - min) / (max - min);
-        float endY = (y + 63.5f - min) / (max - min);
+        float startX = (x - min) / (max - min);
+        float startY = (y - min) / (max - min);
+        float endX = (x + 64.0f - min) / (max - min);
+        float endY = (y + 64.0f - min) / (max - min);
 
         std::vector<float> uvs
         {

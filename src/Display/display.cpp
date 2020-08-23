@@ -25,6 +25,7 @@ Display CreateDisplay(int width, int height, const char* title)
 		exit(-1);
 	}
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 
 	// Initialize GLAD
 	if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
