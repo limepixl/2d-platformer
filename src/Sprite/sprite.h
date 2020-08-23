@@ -44,9 +44,16 @@ struct Sprite
 
 struct Batch
 {
+	unsigned int VAO;
+	unsigned int VBOs[2];
+	unsigned int EBO;
 	std::vector<float> vertices;
 	std::vector<float> uvs;
+	std::vector<unsigned int> indices;
 };
+
+Batch PreallocateBatch();
+void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV);
 
 struct Player
 {
@@ -60,5 +67,4 @@ struct Player
 	int score;
 };
 
-void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV);
 void ProcessCollisions(Player& player, std::vector<Sprite>& level);

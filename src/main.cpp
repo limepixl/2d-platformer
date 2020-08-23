@@ -23,25 +23,7 @@ int main()
 	std::vector<Sprite> level = LoadLevelFromFile("res/levels/level1.txt", playerIndex);
 	Player player{ level[playerIndex], false, 0, 30, {0.0f, 0.0f}, {0.0f, 0.0f}, 0 };
 	
-	Batch batch;
-
-	// Set up VAO for all batched data
-	GLuint VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	// Allocate 1000 * 2 * sizeof(float) bytes for positions and uvs separately
-	GLuint VBOs[2];
-	glGenBuffers(2, VBOs);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-	glBufferData(GL_ARRAY_BUFFER, 1000 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-	glBufferData(GL_ARRAY_BUFFER, 1000 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	Batch batch = PreallocateBatch();
 
 	glm::mat4 projection = glm::ortho(0.0f, (float)display.width, 0.0f, (float)display.height, -1.0f, 1.0f);
 	glUniformMatrix4fv(shader.uniforms["projection"], 1, GL_FALSE, &projection[0][0]);
@@ -61,19 +43,13 @@ int main()
 		glUniformMatrix4fv(shader.uniforms["PV"], 1, GL_FALSE, &PV[0][0]);
 
 		BatchSpriteData(level, batch, PV);
-
-		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.vertices.size() * sizeof(float), batch.vertices.data());
-
-		glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, batch.uvs.size() * sizeof(float), batch.uvs.data());
-
+		
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glDrawArrays(GL_TRIANGLES, 0, (int)batch.vertices.size() / 2);
+		glDrawElements(GL_TRIANGLES, (int)batch.indices.size(), GL_UNSIGNED_INT, nullptr);
 
 		batch.vertices.clear();
 		batch.uvs.clear();
+		batch.indices.clear();
 
 		glfwSwapBuffers(display.window);
 		glfwPollEvents();

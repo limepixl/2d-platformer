@@ -2,6 +2,32 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+Batch PreallocateBatch()
+{
+    // Set up VAO for all batched data
+    Batch batch;
+	glGenVertexArrays(1, &batch.VAO);
+	glBindVertexArray(batch.VAO);
+
+	// Allocate 1000 * 2 * sizeof(float) bytes for positions and uvs separately
+	glGenBuffers(2, batch.VBOs);
+	glBindBuffer(GL_ARRAY_BUFFER, batch.VBOs[0]);
+	glBufferData(GL_ARRAY_BUFFER, 1000 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, batch.VBOs[1]);
+	glBufferData(GL_ARRAY_BUFFER, 1000 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+    glGenBuffers(1, &batch.EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batch.EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 1000 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+
+    return batch;
+}
+
 void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV)
 {
     int spriteWidth = 64;
@@ -10,11 +36,12 @@ void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& 
     float min = 0.0f;
     float max = 4.0f * spriteWidth;
 
+    unsigned int index = 0;
     int numSprites = (int)level.size();
     for(int i = 0; i < numSprites; i++)
     {
         Sprite& sprite = level[i];
-        if(sprite.xIndex == -1 || sprite.yIndex == -1)
+        if(sprite.type == AIR)
             continue;
 
         // Generate UVs from sprite index (4x4 matrix of sprites on atlas)
@@ -31,9 +58,7 @@ void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& 
             startX, startY,
             endX, startY,
             endX, endY,
-            endX, endY,
             startX, endY,
-            startX, startY
         };
 
         glm::vec2& pos = sprite.position;
@@ -42,9 +67,13 @@ void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& 
             pos.x * fSpriteWidth      , pos.y * fSpriteWidth,
             fSpriteWidth * (1 + pos.x), pos.y * fSpriteWidth,
             fSpriteWidth * (1 + pos.x), fSpriteWidth * (1 + pos.y),
-            fSpriteWidth * (1 + pos.x), fSpriteWidth * (1 + pos.y),
             pos.x * fSpriteWidth      , fSpriteWidth * (1 + pos.y),
-            pos.x * fSpriteWidth      , pos.y * fSpriteWidth
+        };
+
+        std::vector<unsigned int> indices
+        {
+            0 + 4*index, 1 + 4*index, 2 + 4*index,
+            2 + 4*index, 3 + 4*index, 0 + 4*index
         };
 
         sprite.visible = true;
@@ -61,7 +90,18 @@ void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& 
 
         batch.vertices.insert(batch.vertices.end(), vertices.begin(), vertices.end());
         batch.uvs.insert(batch.uvs.end(), uvs.begin(), uvs.end());
+        batch.indices.insert(batch.indices.end(), indices.begin(), indices.end());
+        index++;
     }
+
+    glBindBuffer(GL_ARRAY_BUFFER, batch.VBOs[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, batch.vertices.size() * sizeof(float), batch.vertices.data());
+
+	glBindBuffer(GL_ARRAY_BUFFER, batch.VBOs[1]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, batch.uvs.size() * sizeof(float), batch.uvs.data());
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batch.EBO);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, batch.indices.size() * sizeof(unsigned int), batch.indices.data());
 }
 
 inline bool AABB(const glm::vec2& p1, const glm::vec2& size1, const glm::vec2& p2, const glm::vec2& size2)
