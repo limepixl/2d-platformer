@@ -53,7 +53,8 @@ int main()
 		ProcessCollisions(player, level);
 
 		glm::mat4 view(1.0);
-		view = glm::translate(view, glm::vec3(-player.sprite.position.x * 64.0f, 0.0f, 0.0f));
+		float cameraX = (player.sprite.position.x > 10.0f) ? (player.sprite.position.x < 40.0f ? -player.sprite.position.x : -40.0f) : -10.0f;
+		view = glm::translate(view, glm::vec3(cameraX * 64.0f, 0.0f, 0.0f));
 		view = glm::translate(view, glm::vec3(WIDTH * 0.5f, 0.0f, 0.0f));
 
 		glm::mat4 PV = projection * view;
