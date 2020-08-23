@@ -2,9 +2,32 @@
 #include <glm/mat4x4.hpp>
 #include <vector>
 
+enum BlockType
+{
+	AIR = -1,
+	BRICK,
+	GRASS,
+	TEMP1,
+	TEMP2,
+	COIN,
+	TEMP3,
+	TEMP4,
+	TEMP5,
+	TEMP6,
+	TEMP7,
+	TEMP8,
+	TEMP9,
+	PLAYER,
+	TEMP10,
+	TEMP11,
+	TEMP12,
+	NUM_BLOCK_TYPES
+};
+
 struct Sprite
 {
 	int xIndex = -1, yIndex = -1;
+	BlockType type;
 	glm::vec2 position;
 	bool visible;
 
@@ -33,6 +56,8 @@ struct Player
 	int allowedJumpTime;
 	glm::vec2 velocity;
 	glm::vec2 acceleration;
+
+	int score;
 };
 
 void BatchSpriteData(std::vector<Sprite>& level, Batch& batch, const glm::mat4& PV);

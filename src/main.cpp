@@ -21,8 +21,8 @@ int main()
 	glUniform1i(shader.uniforms["tex"], textureAtlas.index);
 
 	int playerIndex;
-	std::vector<Sprite> level = LoadLevelFromFile("res/levels/level_template.txt", playerIndex);
-	Player player{ level[playerIndex], false, 0, 30, {0.0f, 0.0f}, {0.0f, 0.0f} };
+	std::vector<Sprite> level = LoadLevelFromFile("res/levels/level1.txt", playerIndex);
+	Player player{ level[playerIndex], false, 0, 30, {0.0f, 0.0f}, {0.0f, 0.0f}, 0 };
 	
 	Batch batch;
 
