@@ -19,9 +19,11 @@ int main()
 	Texture textureAtlas = LoadTexture2DFromFile("res/images/atlas.png");
 	glUniform1i(shader.uniforms["tex"], textureAtlas.index);
 
+	std::vector<Enemy> enemies;
+
 	int playerIndex;
-	std::vector<Sprite> level = LoadLevelFromFile("res/levels/level1.txt", playerIndex);
-	Player player{ level[playerIndex], false, 0, 20, {0.0f, 0.0f}, {0.0f, 0.0f}, 0 };
+	std::vector<Sprite> level = LoadLevelFromFile("res/levels/level1.txt", playerIndex, enemies);
+	Player player{ level[playerIndex], false, 0, 20, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec2(playerIndex % 50, playerIndex / 50), 0 };
 	
 	Batch batch = PreallocateBatch();
 
@@ -32,7 +34,8 @@ int main()
 	{
 		DeltaTimeCalc(display);
 		ProcessInput(display, player);
-		ProcessCollisions(player, level);
+		ProcessCollisionsPlayer(player, level);
+		ProcessCollisionsEnemies(enemies, level, player, display.deltaTime);
 
 		glm::mat4 view(1.0);
 		float cameraX = (player.sprite.position.x > 10.0f) ? (player.sprite.position.x < 40.0f ? -player.sprite.position.x : -40.0f) : -10.0f;

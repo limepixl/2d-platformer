@@ -20,4 +20,4 @@ struct Shader
 
 Shader LoadShadersFromFiles(const char* vShaderPath, const char* fShaderPath);
 Texture LoadTexture2DFromFile(const char* imgPath);
-std::vector<struct Sprite> LoadLevelFromFile(const char* path, int& playerIndex);
+std::vector<struct Sprite> LoadLevelFromFile(const char* path, int& playerIndex, std::vector<struct Enemy>& enemies);

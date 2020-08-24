@@ -109,7 +109,7 @@ inline bool AABB(const glm::vec2& p1, const glm::vec2& size1, const glm::vec2& p
     return (p1.x < p2.x + size2.x && p1.x + size1.x > p2.x) && (p1.y < p2.y + size2.y && p1.y + size1.y > p2.y);
 }
 
-void ProcessCollisions(Player& player, std::vector<Sprite>& level)
+void ProcessCollisionsPlayer(Player& player, std::vector<Sprite>& level)
 {
     glm::vec2 oldPlayerPos = player.sprite.position;
     glm::vec2 newPlayerPos = player.sprite.position + player.velocity;
@@ -152,7 +152,7 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
     {
         Sprite& s1 = level[int(newPlayerPos.x) + oldPlayerPosY * 50];
         Sprite& s2 = level[int(newPlayerPos.x) + oldPlayerPosYOffset * 50];
-        if((s1.type != AIR && s1.type != COIN && s1 != player.sprite) || (s2.type != AIR && s2.type != COIN && s2 != player.sprite))
+        if((s1.type >= 0 && s1.type <= 3) || (s2.type >= 0 && s2.type <= 3))
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x) + 1.0f;
             player.velocity.x = 0.0f;
@@ -165,11 +165,11 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
     {
         Sprite& s1 = level[int(newPlayerPos.x) + 1 + oldPlayerPosY * 50];
         Sprite& s2 = level[int(newPlayerPos.x) + 1 + oldPlayerPosYOffset * 50];
-        if((s1.type != AIR && s1.type != COIN && s1 != player.sprite) || (s2.type != AIR && s2.type != COIN && s2 != player.sprite))
+        if((s1.type >= 0 && s1.type <= 3) || (s2.type >= 0 && s2.type <= 3))
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x);
             player.velocity.x = 0.0f;
-            
+
             if(player.velocity.y < 0.0f)
                 player.velocity.y *= 0.5f;
         }
@@ -180,7 +180,7 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
     {
         Sprite& s1 = level[(int)newPlayerPos.x + int(newPlayerPos.y) * 50];
         Sprite& s2 = level[(int)(newPlayerPos.x + 0.99f) + int(newPlayerPos.y) * 50];
-        if((s1.type != AIR && s1.type != COIN && s1 != player.sprite) || (s2.type != AIR && s2.type != COIN && s2 != player.sprite))
+        if((s1.type >= 0 && s1.type <= 3) || (s2.type >= 0 && s2.type <= 3))
         {
             player.sprite.position.y = newPlayerPos.y = (float)((int)(newPlayerPos.y + 1));
             player.velocity.y = 0.0f;
@@ -207,12 +207,69 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
     {
         Sprite& s1 = level[(int)newPlayerPos.x + (int(newPlayerPos.y) + 1) * 50];
         Sprite& s2 = level[(int)(newPlayerPos.x + 0.99f) + (int(newPlayerPos.y) + 1) * 50];
-        if((s1.type != AIR && s1.type != COIN && s1 != player.sprite) || (s2.type != AIR && s2.type != COIN && s2 != player.sprite))
+        if((s1.type >= 0 && s1.type <= 3) || (s2.type >= 0 && s2.type <= 3))
         {
             player.sprite.position.y = (float)((int)(newPlayerPos.y));
             player.velocity.y = 0.0f;
             player.acceleration.y = 0.0f;
             player.jumpTime = 1000;
         }
+    }
+}
+
+void ProcessCollisionsEnemies(std::vector<Enemy>& enemies, std::vector<Sprite>& level, Player& player, float deltaTime)
+{
+    float enemySpeed = 2.0f * deltaTime;
+    for(size_t i = 0; i < enemies.size(); i++)
+    {
+        Enemy& e = enemies.at(i);
+        if(!e.alive)
+            continue;
+
+        glm::vec2 oldPos = e.sprite.position;
+        glm::vec2 newPos = e.sprite.position + e.direction * enemySpeed;
+
+        int oldPosY = int(oldPos.y);
+        int oldPosYOffset = int(oldPos.y + 0.99f);
+
+        if(int(newPos.x) - 1 < 0)
+        {
+            e.direction *= -1.0f;
+            e.sprite.position.x = 1.0f;
+        }
+        else if(int(newPos.x) > 49)
+        {
+            e.direction *= -1.0f;
+            e.sprite.position.x = 49.0f;
+        }
+
+        if(e.direction.x <= 0.0f)
+        {
+            Sprite& s1 = level[int(newPos.x) + oldPosY * 50];
+            Sprite& s2 = level[int(newPos.x) + oldPosYOffset * 50];
+            if((s1.type >= 0 && s1.type <= 3) || (s2.type >= 0 && s2.type <= 3))
+                e.direction *= -1.0f;
+        }
+        else
+        {
+            Sprite& s1 = level[int(newPos.x) + 1 + oldPosY * 50];
+            Sprite& s2 = level[int(newPos.x) + 1 + oldPosYOffset * 50];
+            if((s1.type >= 0 && s1.type <= 3) || (s2.type >= 0 && s2.type <= 3))
+                e.direction *= -1.0f;
+        }
+
+        if(AABB(e.sprite.position, glm::vec2(1.0, 1.0), player.sprite.position, glm::vec2(1.0, 1.0)))
+        {
+            if(player.sprite.position.y > e.sprite.position.y + 0.5f)
+            {
+                e.alive = false;
+                e.sprite = {-1, -1, AIR, {0.0f, 0.0f}, false};
+                continue;
+            } 
+            else
+                player.sprite.position = player.spawn;
+        }
+
+        e.sprite.position += e.direction * enemySpeed;
     }
 }

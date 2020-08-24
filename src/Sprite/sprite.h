@@ -10,7 +10,7 @@ enum BlockType
 	TEMP1,
 	TEMP2,
 	COIN,
-	TEMP3,
+	ENEMY,
 	TEMP4,
 	TEMP5,
 	TEMP6,
@@ -65,8 +65,18 @@ struct Player
 	
 	glm::vec2 velocity;
 	glm::vec2 acceleration;
-
+	glm::vec2 spawn;
+	
 	int score;
 };
 
-void ProcessCollisions(Player& player, std::vector<Sprite>& level);
+void ProcessCollisionsPlayer(Player& player, std::vector<Sprite>& level);
+
+struct Enemy
+{
+	Sprite& sprite;
+	glm::vec2 direction;
+	bool alive;
+};
+
+void ProcessCollisionsEnemies(std::vector<Enemy>& enemies, std::vector<Sprite>& level, Player& player, float deltaTime);

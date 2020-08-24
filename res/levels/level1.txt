@@ -19,9 +19,9 @@ B________________________________________________B
 B___BBBBB___________BBBBBBBBBBB__________________B
 B________________________________________________B
 B_________________B______________BBBBBBBB________B
-B_______________BBB______________________________B
-B___P_________BBBBB______BBBBB___________________B
-B___________BBBBBBB______________________________B
+B_______________BBB______BBB_____________________B
+B___P_________BBBBB______________________________B
+B___________BBBBBBB_______________E______________B
 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 
 // _ == Air
@@ -29,4 +29,5 @@ GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 // B == Brick
 // G == Grass
 // C == Coin
+// E == Enemy
 // 50x25 levels

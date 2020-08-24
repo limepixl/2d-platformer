@@ -159,7 +159,7 @@ Texture LoadTexture2DFromFile(const char* imgPath)
     return {texture, Texture::GlobalTextureIndex++, (uint32_t)width, (uint32_t)height};
 }
 
-std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
+std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex, std::vector<Enemy>& enemies)
 {
     FILE* levelRaw = fopen(path, "rb");
     if(levelRaw == nullptr)
@@ -192,6 +192,11 @@ std::vector<Sprite> LoadLevelFromFile(const char* path, int& playerIndex)
                 level.at(j + i * 50) = {1, 0, GRASS, {(float)j, (float)i}, false};
             else if(buffer[j] == 'C')
                 level.at(j + i * 50) = {0, 1, COIN, {(float)j, (float)i}, false};
+            else if(buffer[j] == 'E')
+            {
+                level.at(j + i * 50) = {1, 1, ENEMY, {(float)j, (float)i}, false};
+                enemies.push_back( {level.at(j + i * 50), glm::vec2(-1.0, 0.0), true} );
+            }
             else if(buffer[j] == 'P')
             {
                 level.at(j + i * 50) = {0, 3, PLAYER, {(float)j, (float)i}, false};
