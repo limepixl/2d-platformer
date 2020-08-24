@@ -156,6 +156,9 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x) + 1.0f;
             player.velocity.x = 0.0f;
+
+            if(player.velocity.y < 0.0f)
+                player.velocity.y *= 0.5f;
         }
     }
     else
@@ -166,6 +169,9 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
         {
             player.sprite.position.x = newPlayerPos.x = (float)((int)newPlayerPos.x);
             player.velocity.x = 0.0f;
+            
+            if(player.velocity.y < 0.0f)
+                player.velocity.y *= 0.5f;
         }
     }
 
@@ -195,7 +201,6 @@ void ProcessCollisions(Player& player, std::vector<Sprite>& level)
         {
             player.acceleration.y = 0.0f;
             player.onGround = true;
-            player.jumpTime = 0;
         }
     }
     else // Moving up

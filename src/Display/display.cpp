@@ -68,37 +68,41 @@ void DeltaTimeCalc(Display& display)
 void ProcessInput(const Display& display, Player& player)
 {
 	player.sprite.position += player.velocity;
-	player.velocity = glm::vec2(0.0, 0.0);
+	player.velocity.y = 0.0f;
+	player.velocity.x *= 0.5f;
 
-	float gravity = 3.0f * display.deltaTime;
+	float gravity = 4.0f * display.deltaTime;
 	if(!player.onGround)
 		player.acceleration -= gravity * glm::vec2(0.0, 1.0);
 
-	float jumpHeight = 4.0f * display.deltaTime;
-	float playerSpeed = 6.0f * display.deltaTime;
+	float jumpHeight = 5.0f * display.deltaTime;
+	float playerSpeed = (player.onGround ? 3.0f : 3.5f) * display.deltaTime;
 	if(glfwGetKey(display.window, GLFW_KEY_A) == GLFW_PRESS)
 		player.velocity -= playerSpeed * glm::vec2(1.0, 0.0);
 	if(glfwGetKey(display.window, GLFW_KEY_D) == GLFW_PRESS)
 		player.velocity += playerSpeed * glm::vec2(1.0, 0.0);
-	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS && player.jumpTime < player.allowedJumpTime)
+	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		player.onGround = false;
-		player.jumpTime++;
-		player.acceleration += jumpHeight * glm::vec2(0.0, 1.0);
+		if(player.jumpTime < player.allowedJumpTime)
+		{
+			player.onGround = false;
+			player.jumpTime++;
+			player.acceleration += jumpHeight * glm::vec2(0.0, 1.0);
+		}
 	}
 	if(glfwGetKey(display.window, GLFW_KEY_SPACE) == GLFW_RELEASE)
-		player.jumpTime = 1000;
+		player.jumpTime = (player.onGround ? 0 : 1000);
 	
 	player.velocity += player.acceleration;
 
 	// Clamp velocity
-	if(player.velocity.x > playerSpeed)
-		player.velocity.x = playerSpeed;
-	else if(player.velocity.x < -playerSpeed)
-		player.velocity.x = -playerSpeed;
+	if(player.velocity.x > 2.0f * playerSpeed)
+		player.velocity.x = 2.0f * playerSpeed;
+	else if(player.velocity.x < -2.0f * playerSpeed)
+		player.velocity.x = -2.0f * playerSpeed;
 
-	if(player.velocity.y < -4.0f * gravity)
-		player.velocity.y = -4.0f * gravity;
-	else if(player.velocity.y > 4.0f * jumpHeight)
-		player.velocity.y = 4.0f * jumpHeight;
+	if(player.velocity.y < -3.0f * gravity)
+		player.velocity.y = -3.0f * gravity;
+	else if(player.velocity.y > 3.0f * jumpHeight)
+		player.velocity.y = 3.0f * jumpHeight;
 }

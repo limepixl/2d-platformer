@@ -21,7 +21,7 @@ int main()
 
 	int playerIndex;
 	std::vector<Sprite> level = LoadLevelFromFile("res/levels/level1.txt", playerIndex);
-	Player player{ level[playerIndex], false, 0, 30, {0.0f, 0.0f}, {0.0f, 0.0f}, 0 };
+	Player player{ level[playerIndex], false, 0, 20, {0.0f, 0.0f}, {0.0f, 0.0f}, 0 };
 	
 	Batch batch = PreallocateBatch();
 
@@ -36,8 +36,7 @@ int main()
 
 		glm::mat4 view(1.0);
 		float cameraX = (player.sprite.position.x > 10.0f) ? (player.sprite.position.x < 40.0f ? -player.sprite.position.x : -40.0f) : -10.0f;
-		view = glm::translate(view, glm::vec3(cameraX * 64.0f, 0.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(WIDTH * 0.5f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(WIDTH * 0.5f + cameraX * 64.0f, 0.0f, 0.0f));
 
 		glm::mat4 PV = projection * view;
 		glUniformMatrix4fv(shader.uniforms["PV"], 1, GL_FALSE, &PV[0][0]);
